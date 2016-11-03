@@ -1,5 +1,4 @@
 #GameJolt API for RPG Maker VX Ace
-# Revised by Heark
 
 module GameJolt
   # Change these for your game
@@ -153,11 +152,10 @@ module GameJolt
     urlHash = urlHash[0]
     result = EFE.request("gamejolt.com", "api/game/v1/data-store/set/?game_id=" + GameId + "&key="+key+"&data="+data+"&signature=" + urlHash)
     result = JSON.decode(result)
-    puts result["response"]
     if result != nil
       return result["response"]
     else
-      return {"success" => "false"}
+      return false
     end
   end
     def self.usersend_server(key, data)
