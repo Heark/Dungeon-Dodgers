@@ -1,8 +1,9 @@
 
 =begin  
-Bazaar System by Heark
+		Bazaar System by Heark
+		GameJolt Addon
 =end
-
+$refund = 0.75
 module Bazaar
 	def self.stringToArray(aString)
 		return aString.tr('[]','').split(',').map{|e|e.to_i}
@@ -16,23 +17,21 @@ module Bazaar
 	def self.SellItem(id)
 		$bazaar_items = GameJolt.get_server("bazaar_items")
 		$Bazaar_Items_array = stringToArray($bazaar_items.to_s)
-		puts $Bazaar_Items_array
 		$Bazaar_Items_array.push(id)
 		GameJolt.send_server("bazaar_items", $Bazaar_Items_array.to_s)
 		puts "Successfully sent to Bazaar!"
 		$game_party.lose_item($data_items[id], 1)
-		amount = $data_items[id].price * 0.75
+		amount = $data_items[id].price * $refund
 		$game_party.gain_gold(amount)
 	end
 	def self.SellWeapon(id)
 		$bazaar_weapons = GameJolt.get_server("bazaar_weapons")
 		$Bazaar_Weapons_array = stringToArray($bazaar_weapons.to_s)
-		puts $Bazaar_Weapons_array
 		$Bazaar_Weapons_array.push(id)
 		GameJolt.send_server("bazaar_weapons", $Bazaar_Weapons_array.to_s)
 		puts "Successfully sent to Bazaar!"
 		$game_party.lose_item($data_weapons[id], 1)
-		amount = $data_weapons[id].price * 0.75
+		amount = $data_weapons[id].price * $refund
 		$game_party.gain_gold(amount)  
 	end
 
