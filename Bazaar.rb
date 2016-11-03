@@ -9,11 +9,12 @@ module Bazaar
 		return aString.tr('[]','').split(',').map{|e|e.to_i}
 	end
 
-	$bazaar_items = GameJolt.get_server("bazaar_items")
 	$Bazaar_Items = []
 	$Bazaar_Items_array = stringToArray($bazaar_items.to_s)
 	$Bazaar_Weapons = []
 	$Bazaar_Weapons_array = stringToArray($bazaar_weapons.to_s)
+	$Bazaar_Armors = []
+	$Bazaar_Armors_array = stringToArray($bazaar_armors.to_s)
 	def self.SellItem(id)
 		$bazaar_items = GameJolt.get_server("bazaar_items")
 		$Bazaar_Items_array = stringToArray($bazaar_items.to_s)
@@ -34,8 +35,18 @@ module Bazaar
 		amount = $data_weapons[id].price * $refund
 		$game_party.gain_gold(amount)  
 	end
+	def self.SellArmor(id)
+		$bazaar_armors = GameJolt.get_server("bazaar_armors")
+		$Bazaar_Armors_array = stringToArray($bazaar_armors.to_s)
+		$Bazaar_Armors_array.push(id)
+		GameJolt.send_server("bazaar_armors", $Bazaar_Armors_array.to_s)
+		puts "Successfully sent to Bazaar!"
+		$game_party.lose_item($data_armors[id], 1)
+		amount = $data_armors[id].price * $refund
+		$game_party.gain_gold(amount)  
+	end
 
-		def self.ItemsShop()
+	def self.ItemsShop()
 		$bazaar_items = GameJolt.get_server("bazaar_items")
 		$Bazaar_Items_array.each do |i|
 			instance_variable_set("@Array_#{i}", Array.new) 
@@ -60,5 +71,17 @@ module Bazaar
 		end
 		SceneManager.call(Scene_Shop)
 		SceneManager.scene.prepare($Bazaar_Weapons, true)
+	end
+	def self.ArmorShop()
+		$bazaar_armors = GameJolt.get_server("bazaar_armors")
+		$Bazaar_Armors_array.each do |i|
+			instance_variable_set("@A_Array_#{i}", Array.new) 
+			instance_variable_get("@A_Array_#{i}").push(2)
+			instance_variable_get("@A_Array_#{i}").push($data_armors[i].id)
+			instance_variable_get("@A_Array_#{i}").push(0)
+			Bazaar_Armors.push(instance_variable_get("@A_Array_#{i}"))
+		end
+		SceneManager.call(Scene_Shop)
+		SceneManager.scene.prepare($Bazaar_Armors, true)
 	end
 end
