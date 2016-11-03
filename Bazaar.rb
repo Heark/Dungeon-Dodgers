@@ -25,6 +25,10 @@ $Bazaar_Weapons_array = stringToArray($bazaar_weapons.to_s)
         amount = $data_items[id].price * 0.75
         $game_party.gain_gold(amount)
   end
+  def self.SellWeapon(id)
+	  
+  end
+
   
 	def self.ItemsShop()
     
